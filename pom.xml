@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.example</groupId>
+    <artifactId>dust_task</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <properties>
+        <java.version>1.8</java.version>
+        <allure.version>2.13.5</allure.version>
+        <owner.version>1.0.10</owner.version>
+        <faker.version>1.0.2</faker.version>
+        <assertj.version>3.15.0</assertj.version>
+        <aspectj.version>1.9.5</aspectj.version>
+        <suite>all.xml</suite>
+        <buildDirectory>${project.basedir}/target</buildDirectory>
+        <allure.results.directory>${buildDirectory}/allure-results</allure.results.directory>
+        <resultsPatternAllure>**/allure-results</resultsPatternAllure>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <selenide.driverManagerEnabled>false</selenide.driverManagerEnabled>
+        <selenide.browser>chrome</selenide.browser>
+        <capabilities.enableVNC>true</capabilities.enableVNC>
+        <capabilities.enableVideo>false</capabilities.enableVideo>
+        <env>prod</env>
+        <be-type>all</be-type>
+        <test-suite>all</test-suite>
+        <url>automationpractice.com</url>
+        <buildId>0</buildId>
+        <parallel>none</parallel>
+    </properties>
+
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/log4j/log4j -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.13.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.codeborne</groupId>
+            <artifactId>selenide</artifactId>
+            <version>5.13.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-selenide</artifactId>
+            <version>${allure.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.yandex.qatools.allure</groupId>
+            <artifactId>allure-maven-plugin</artifactId>
+            <version>2.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-testng</artifactId>
+            <version>2.13.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.15.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.21</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.yandex.qatools.ashot</groupId>
+            <artifactId>ashot</artifactId>
+            <version>1.5.4</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.seleniumhq.selenium</groupId>
+                    <artifactId>selenium-remote-driver</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.madgag/animated-gif-lib -->
+        <dependency>
+            <groupId>com.madgag</groupId>
+            <artifactId>animated-gif-lib</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.12</version>
+        </dependency>
+    </dependencies>
+
+    <reporting>
+        <excludeDefaults>true</excludeDefaults>
+        <plugins>
+            <plugin>
+                <groupId>ru.yandex.qatools.allure</groupId>
+                <artifactId>allure-maven-plugin</artifactId>
+                <version>LATEST</version>
+                <configuration>
+                    <resultsPattern>${resultsPatternAllure}</resultsPattern>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
+
+    <build>
+        <directory>${buildDirectory}</directory>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <testSourceDirectory>src/test/java</testSourceDirectory>
+        <defaultGoal>compile</defaultGoal>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.1</version>
+                <configuration>
+<!--                    <argLine>-->
+<!--                        -javaagent:"${settings.localRepository}"/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar-->
+<!--                    </argLine>-->
+                    <useSystemClassLoader>true</useSystemClassLoader>
+                    <systemPropertyVariables>
+                        <buildId>${buildId}</buildId>
+                        <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
+                        <selenide.browser>${selenide.browser}</selenide.browser>
+                        <selenide.baseUrl>http://${url}</selenide.baseUrl>
+                        <selenide.timeout>20000</selenide.timeout>
+                        <selenide.reportsFolder>target</selenide.reportsFolder>
+                        <selenide.screenshots>false</selenide.screenshots>
+                        <capabilities.enableVNC>${capabilities.enableVNC}</capabilities.enableVNC>
+                        <capabilities.enableVideo>${capabilities.enableVideo}</capabilities.enableVideo>
+                    </systemPropertyVariables>
+                    <parallel>none</parallel>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjweaver</artifactId>
+                        <version>LATEST</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+</project>
